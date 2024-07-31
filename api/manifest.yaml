@@ -22,6 +22,23 @@ spec:
               value: "mongodb://mongodb:27017"
             - name: DB_NAME
               value: "CustomerTransactions"
+            - name: KAFKA_BROKERS
+              value: "unity-kafka:9092"
+            - name: KAFKA_TOPIC
+              value: "purchases"
+            - name: KAFKA_CLIENT_ID
+              value: "web-server"
+            - name: KAFKA_SASL_USERNAME
+              value: "user1"
+            - name: KAFKA_SASL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: unity-kafka-user-passwords
+                  key: client-passwords
+            - name: KAFKA_SASL_MECHANISM
+              value: "plain" # or scram-sha-256, scram-sha-512
+            - name: KAFKA_SSL
+              value: "false" # or true if SSL is enabled
 ---
 apiVersion: v1
 kind: Service
@@ -35,5 +52,3 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-      nodePort: 30080
-

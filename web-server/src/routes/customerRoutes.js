@@ -5,6 +5,18 @@ const {getAllUserBuys} = require('../controllers/apiController')
 const router = express.Router();
 
 router.get('/getAllUserBuys', async (req, res) => await getAllUserBuys(res));
-router.post('/buy', (req) => buy(req.body)) //TODO
+router.post('/buy', (req) => {
+    try {
+        buy(JSON.stringify(req.body)); //TODO
+        return {
+            success: true,
+            status: 200,
+        };
+    } catch (e) {
+        return {
+            success: false, e
+        };
+    }
+})
 
 module.exports = router;

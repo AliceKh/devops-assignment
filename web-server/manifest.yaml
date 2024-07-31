@@ -1,39 +1,53 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: web-server
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: api
+      app: web-server
   template:
     metadata:
       labels:
-        app: api
+        app: web-server
     spec:
       containers:
-        - name: api
-          image: alicekh/api:0.1.0
+        - name: web-server
+          image: alicekh/web-server:0.1.0
           ports:
             - containerPort: 3000
           env:
-            - name: MONGODB_URL
-              value: "mongodb://mongodb:27017"
-            - name: DB_NAME
-              value: "CustomerTransactions"
+            - name: KAFKA_CLIENT_ID
+              value: "web-server"
+            - name: KAFKA_BROKERS
+              value: "unity-kafka:9092"
+            - name: KAFKA_TOPIC
+              value: "purchases"
+            - name: API_URL
+              value: "http://api-service:3000"
+            - name: KAFKA_SASL_USERNAME
+              value: "user1"
+            - name: KAFKA_SASL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: unity-kafka-user-passwords
+                  key: client-passwords
+            - name: KAFKA_SASL_MECHANISM
+              value: "plain" # or scram-sha-256, scram-sha-512
+            - name: KAFKA_SSL
+              value: "false" # or true if SSL is enabled
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-service
+  name: web-server-service
 spec:
   type: NodePort
   selector:
-    app: api
+    app: web-server
   ports:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-      nodePort: 30080
 

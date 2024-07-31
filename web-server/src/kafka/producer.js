@@ -1,15 +1,17 @@
-const kafka = require('../config/kafka');
+const kafka = require('./kafkaConfig');
 
 const producer = kafka.producer();
 
 const connectProducer = async () => {
+    console.log("connecting to kafka");
     await producer.connect();
 };
 
 const sendMessage = async (topic, messages) => {
+    console.log(`sending message to ${topic} msg: ${messages}`)
     await producer.send({
         topic: topic,
-        messages: messages
+        messages: messages,
     });
 };
 
@@ -20,5 +22,5 @@ const disconnectProducer = async () => {
 module.exports = {
     connectProducer,
     sendMessage,
-    disconnectProducer
+    disconnectProducer,
 };
