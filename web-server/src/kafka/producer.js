@@ -3,7 +3,6 @@ const kafka = require('./kafkaConfig');
 const producer = kafka.producer();
 
 const connectProducer = async () => {
-    console.log("connecting to kafka");
     await producer.connect();
 };
 

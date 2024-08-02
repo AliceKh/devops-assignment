@@ -5,17 +5,12 @@ const {getAllUserBuys} = require('../controllers/apiController')
 const router = express.Router();
 
 router.get('/getAllUserBuys', async (req, res) => await getAllUserBuys(res));
-router.post('/buy', (req) => {
+router.post('/buy', async (req, res) => {
     try {
-        buy(JSON.stringify(req.body)); //TODO
-        return {
-            success: true,
-            status: 200,
-        };
+        await buy(req.body);
+        res.status(200).json({success: "Purchase received"})
     } catch (e) {
-        return {
-            success: false, e
-        };
+        res.status(500).json({error: 'Failed to send purchase: ', e})
     }
 })
 

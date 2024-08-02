@@ -11,7 +11,7 @@ const createTopic = async (topicName) => {
                 {
                     topic: topicName,
                     numPartitions: 3,
-                    replicationFactor: 3,
+                    replicationFactor: 1,
                 },
             ],
         });
